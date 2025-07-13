@@ -31,7 +31,7 @@ end
 
 for i=1:10
     percentage(i)=(corr_count(i)/total(i))*100;
-    fprintf("Digit: %d Accuracy: %.2f\n",i-1, percentage(i));
+    fprintf("Digit: %d Accuracy: %.2f%%\n",i-1, percentage(i));
 end
 %printing accuracy
 plot((0:9),percentage);
