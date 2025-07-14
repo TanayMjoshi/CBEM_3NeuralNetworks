@@ -5,18 +5,18 @@ data = readmatrix(filename);
 
 hold on; %turn off for one digit one graph
 digits_to_plot = 0:9;
-samples_per_digit = 5;
+%samples_per_digit = 5;
 
 for digit = digits_to_plot
     % Find indices of this digit in the dataset
     idx = find((data(:, 1) == digit));
     % Take first N samples
-    %idx = idx(randi(length(idx)));
+    samples_per_digit=length(idx);
     
     for j = 1:samples_per_digit
         sample = data(idx(j), 2:end);
         img = reshape(sample, [28, 28])';
-        img = flipud(img); %flip
+       % img = flipud(img); %flip
 
         %figure; %for each digit on one graph
 
