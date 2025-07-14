@@ -5,13 +5,13 @@ data = readmatrix(filename);
 
 hold on; %turn off for one digit one graph
 digits_to_plot = 0:9;
-samples_per_digit = 1;
+samples_per_digit = 5;
 
 for digit = digits_to_plot
     % Find indices of this digit in the dataset
     idx = find((data(:, 1) == digit));
     % Take first N samples
-    idx = idx(randi(length(idx)));
+    %idx = idx(randi(length(idx)));
     
     for j = 1:samples_per_digit
         sample = data(idx(j), 2:end);
