@@ -35,7 +35,7 @@ for i=1:10
 end
 %printing accuracy
 plot((0:9),percentage);
-
+title('Numbers vs Accuracy');
 
 fprintf("Accuracy of our Neural Network: %.2f%% \n",(sum(corr_count)/l)*100);
 disp('End');
