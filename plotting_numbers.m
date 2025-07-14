@@ -16,7 +16,7 @@ for digit = digits_to_plot
     for j = 1:samples_per_digit
         sample = data(idx(j), 2:end);
         img = reshape(sample, [28, 28])';
-       % img = flipud(img); %flip
+        img = flipud(img); %flip
 
         %figure; %for each digit on one graph
 
