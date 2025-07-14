@@ -4,7 +4,7 @@ clear;
 
 filename = fullfile('datasets','mnist_test_10.csv');
 data = readmatrix(filename);
-index = 5;  
+index = randi(10);  
 
 % specify digit
 label = data(index, 1);
