@@ -5,7 +5,7 @@ data = readmatrix(filename);
 
 hold on; %turn off for one digit one graph
 digits_to_plot = 0:9;
-%samples_per_digit = 5;
+
 
 for digit = digits_to_plot
     % Find indices of this digit in the dataset
@@ -17,8 +17,6 @@ for digit = digits_to_plot
         sample = data(idx(j), 2:end);
         img = reshape(sample, [28, 28])';
         img = flipud(img); %flip
-
-        %figure; %for each digit on one graph
 
         % Calculate position for subplot-like grid
         x_offset = (j-1) * 28;
@@ -33,5 +31,5 @@ end
 
 axis equal;
 
-%axis on;  %for each digit on one graph
+
 title('MNIST digits 0–9 with multiple examples');
