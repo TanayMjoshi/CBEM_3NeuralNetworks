@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Draw a Digit - 28x28 Pixel Extractor</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #1e1e1e;
+      color: white;
+    }
+    canvas {
+      margin: 10px;
+      background: white;
+      border: 2px solid #ccc;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      background: #3e8ed0;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2b6fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Draw a Digit</h1>
+  <canvas id="drawCanvas" width="280" height="280"></canvas>
+  <canvas id="previewCanvas" width="28" height="28" style="image-rendering: pixelated;"></canvas>
+  <br>
+  <button onclick="clearCanvas()">Clear</button>
+  <button onclick="downloadJSON()">Download JSON</button>
+  <button onclick="downloadCSV()">Download CSV</button>
+
+  <script>
+    const drawCanvas = document.getElementById("drawCanvas");
+    const previewCanvas = document.getElementById("previewCanvas");
+    const ctx = drawCanvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, 280, 280);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 20;
+    ctx.lineCap = "round";
+
+    let drawing = false;
+
+    drawCanvas.onmousedown = () => drawing = true;
+    drawCanvas.onmouseup = () => {
+      drawing = false;
+      processDrawing();
+    };
+    drawCanvas.onmousemove = (e) => {
+      if (!drawing) return;
+      const rect = drawCanvas.getBoundingClientRect();
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    };
+
+    function processDrawing() {
+      const tmpCanvas = document.createElement('canvas');
+      tmpCanvas.width = tmpCanvas.height = 28;
+      const tmpCtx = tmpCanvas.getContext('2d');
+      tmpCtx.drawImage(drawCanvas, 0, 0, 28, 28);
+      // preview
+      previewCanvas.getContext('2d').drawImage(drawCanvas, 0, 0, 28, 28);
+
+      const imgData = tmpCtx.getImageData(0, 0, 28, 28).data;
+      const arr = [];
+      for (let i = 0; i < imgData.length; i += 4) {
+        // invert if needed, or just use grayscale
+        const grayscale = 255 - imgData[i]; // R only (R=G=B for grayscale)
+        arr.push(grayscale);
+      }
+      window.pixelArray = arr; // Save for download
+      console.log("28x28 Pixel Array:", arr);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, 280, 280);
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, 280, 280);
+      previewCanvas.getContext('2d').clearRect(0, 0, 28, 28);
+      window.pixelArray = [];
+    }
+
+    function downloadJSON() {
+      if (!window.pixelArray) return alert("Draw something first 😉");
+      const blob = new Blob([JSON.stringify(window.pixelArray)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'digit.json';
+      link.click();
+    }
+
+    function downloadCSV() {
+      if (!window.pixelArray) return alert("Draw something first 😘");
+      const csv = window.pixelArray.join(',');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'digit.csv';
+      link.click();
+    }
+  </script>
+</body>
+</html>
